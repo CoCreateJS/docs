@@ -1,3 +1,12 @@
+## [1.18.4](https://github.com/CoCreate-app/CoCreate-docs/compare/v1.18.3...v1.18.4) (2026-07-11)
+
+
+### Bug Fixes
+
+* bump package versions ([5f6c20b](https://github.com/CoCreate-app/CoCreate-docs/commit/5f6c20b3ec024888d1bc4b1e0fcc1a44d8a9a5aa))
+* removed post install and add add packages to apprved list ([3524d68](https://github.com/CoCreate-app/CoCreate-docs/commit/3524d68f233b7a301f643b6244b35087ae874421))
+* semantic version handling ([4c44773](https://github.com/CoCreate-app/CoCreate-docs/commit/4c44773a1b22a0284abe3e3e46b934d2988c62fa))
+
 ## [1.18.3](https://github.com/CoCreate-app/CoCreate-docs/compare/v1.18.2...v1.18.3) (2026-01-19)
 
 
