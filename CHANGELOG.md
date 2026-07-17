@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/CoCreate-app/CoCreate-docs/compare/v1.18.4...v1.19.0) (2026-07-17)
+
+
+### Features
+
+* update automated workflow and release configuration for improved semantic release handling ([b19eb03](https://github.com/CoCreate-app/CoCreate-docs/commit/b19eb035a28471d92699777580fdf4b893828098))
+
 ## [1.18.4](https://github.com/CoCreate-app/CoCreate-docs/compare/v1.18.3...v1.18.4) (2026-07-11)
 
 
