@@ -32,7 +32,7 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/cocreatejs/CoCreate-docs.git"
+    "url": "git+https://github.com/cocreatejs/CoCreate-docs.git"
   },
   "author": "CoCreate LLC",
   "license": "MIT",
