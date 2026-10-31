@@ -37,9 +37,9 @@
   "author": "CoCreate LLC",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CoCreate-app/CoCreate-docs/issues"
+    "url": "https://github.com/CoCreateJS/CoCreate-docs/issues"
   },
-  "homepage": "https://github.com/CoCreate-app/CoCreate-docs#readme",
+  "homepage": "https://github.com/CoCreateJS/CoCreate-docs#readme",
   "dependencies": {
     "@cocreate/config": "^1.21.0",
     "@cocreate/crud-client": "^1.37.0",
