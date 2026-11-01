@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require("path")
 const glob = require('glob');
 const parseHtmlComments = require('parse-html-comments')
-const crud = require('@cocreate/crud')
-const config = require('@cocreate/config')
+const parseJSDoc = require("./jsdoc");
+const renderDocumentation = require("./render");
 
 /**
  * 	"extract": {
@@ -121,5 +121,13 @@ function CoCreateExtract(directory, ignoreFolders, extensions) {
 
 
 
-module.exports = CoCreateExtract
+// Keep the existing extractor as the default export while exposing JSDoc
+// parsing as the structured documentation API.
+CoCreateExtract.parseJSDoc = parseJSDoc;
+CoCreateExtract.renderDocumentation = renderDocumentation;
+CoCreateExtract.prepareDataset = renderDocumentation.prepareDataset;
+CoCreateExtract.renderTemplate = renderDocumentation.renderTemplate;
+CoCreateExtract.renderTargets = renderDocumentation.renderTargets;
+
+module.exports = CoCreateExtract;
 

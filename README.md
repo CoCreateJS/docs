@@ -37,6 +37,85 @@ $ npm i @cocreate/docs
 $ yarn install @cocreate/docs
 ```
 
+## Parse JSDoc
+
+The CommonJS export keeps `CoCreateExtract` as the default function and exposes
+`parseJSDoc` for structured JSDoc parsing. It returns documented JSDoc doclets.
+`renderDocumentation` consumes the CLI's documentation dataset and writes an
+index page plus one page per module from CoCreate HTML templates.
+
+```js
+const CoCreateDocs = require("@cocreate/docs");
+
+const doclets = CoCreateDocs.parseJSDoc("./src", {
+	recurse: true,
+	private: false,
+	onDiagnostic: (message) => console.warn(message)
+});
+```
+
+Templates are files in the configured `documentation.template` directory. The
+CLI resolves `documentation.template`, `documentation.output`, and target paths
+relative to the active `CoCreate.config.js`. Data is rendered into static HTML;
+no standalone JSON manifest is written.
+
+The returned dataset is the CoCreate data object itself, with `type`,
+`schemaVersion`, `errors`, and `modules` at its top level. Each module record
+keeps its metadata flat and contains its JSDoc `doclets` and parser
+`diagnostics`. The renderer adds slugs, display titles, and doclet anchors. It
+renders the dataset in the index; each module page also receives that page's
+current module as a `module` render scope. There is no project-name field.
+
+The standalone `renderTemplate(template, data)` helper handles double-curly
+data paths and nested native `<template render="path" render-as="name">`
+repeats. It returns an HTML string and preserves the native template elements
+as inert source references. Interpolated values are HTML-escaped, and unknown
+paths remain unchanged for inspection. The helper only renders supplied data;
+it does not fetch CRUD data or track live rendered items.
+
+The generator takes a `targets` array. Each target names a template and output
+path; `data` optionally selects an object in the dataset, and `each` plus `as`
+can render one output per array entry. This lets a project generate shared
+partials such as a menu alongside its index and module pages:
+
+```js
+documentation: {
+	output: "./src/docs",
+	template: "./src/apps/docs/templates",
+	targets: [
+		{ template: "menu.html", output: "menu.html" },
+		{ template: "index.html", output: "index.html" },
+		{
+			template: "page.html",
+			output: "{{module.slug}}/index.html",
+			each: "modules",
+			as: "module"
+		}
+	]
+}
+```
+
+```js
+const files = CoCreateDocs.renderDocumentation(dataset, {
+	template: "./src/apps/docs/templates",
+	output: "./src/docs",
+	targets: [
+		{ template: "menu.html", output: "menu.html" },
+		{ template: "index.html", output: "index.html" },
+		{
+			template: "page.html",
+			output: "{{module.slug}}/index.html",
+			each: "modules",
+			as: "module"
+		}
+	]
+});
+```
+
+`onDiagnostic` receives JSDoc warnings and errors. If JSDoc can still produce
+JSON, valid doclets are still returned so one malformed tag does not discard
+the module's other documentation.
+
 # Table of Contents
 
 -   [Table of Contents](#table-of-contents)
