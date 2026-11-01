@@ -97,35 +97,19 @@ function resolvePath(data, path) {
     return value;
 }
 
-function stringify(value) {
-    if (value === null || value === undefined) return "";
-    if (typeof value === "object") return JSON.stringify(value);
-    return String(value);
-}
-
-function escapeHTML(value) {
-    return stringify(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-}
-
-function interpolate(source, data) {
-    return source.replace(/\{\{\s*([\w$.[\]-]+)\s*\}\}/g, (placeholder, path) => {
-        const value = resolvePath(data, path);
-        return value === undefined ? placeholder : escapeHTML(value);
+async function interpolate(source, data, renderValue, renderAs) {
+    return renderValue(undefined, data, source, renderAs, undefined, undefined, undefined, {
+        escapeOutput: true
     });
 }
 
-function renderRegion(source, data) {
+async function renderRegion(source, data, renderValue, renderAs) {
     const roots = findTemplateRoots(source);
     let output = "";
     let cursor = 0;
 
     for (const template of roots) {
-        output += interpolate(source.slice(cursor, template.start), data);
+        output += await interpolate(source.slice(cursor, template.start), data, renderValue, renderAs);
         const renderPath = template.attributes.render;
         if (!renderPath) {
             output += source.slice(template.start, template.end);
@@ -133,15 +117,15 @@ function renderRegion(source, data) {
             continue;
         }
 
-        const renderAs = template.attributes["render-as"] || renderPath.split(".").at(-1);
+        const templateRenderAs = template.attributes["render-as"] || renderPath.split(".").at(-1);
         const value = resolvePath(data, renderPath);
         const items = Array.isArray(value) ? value
             : value === undefined || value === null ? [] : [value];
         const body = source.slice(template.openEnd, template.closeStart);
 
         for (const item of items) {
-            const scope = { ...data, [renderAs]: item };
-            output += renderRegion(body, scope);
+            const scope = { ...data, [templateRenderAs]: item };
+            output += await renderRegion(body, scope, renderValue, templateRenderAs);
         }
 
         // Keep the native template as an inert source reference in the output.
@@ -149,15 +133,17 @@ function renderRegion(source, data) {
         cursor = template.end;
     }
 
-    return output + interpolate(source.slice(cursor), data);
+    return output + await interpolate(source.slice(cursor), data, renderValue, renderAs);
 }
 
-/** Render double-curly paths and native <template render="path"> repeats. */
-function renderTemplate(template, data = {}) {
+/** Render value placeholders with the supplied CoCreate Utils helper. */
+async function renderTemplate(template, data = {}, renderValue) {
     if (typeof template !== "string") throw new TypeError("Template must be an HTML string.");
     if (data === null || typeof data !== "object" || Array.isArray(data))
         throw new TypeError("Render data must be an object.");
-    return renderRegion(template, data);
+    if (typeof renderValue !== "function")
+        throw new TypeError("A CoCreate Utils renderValue function is required.");
+    return renderRegion(template, data, renderValue);
 }
 
 module.exports = renderTemplate;

@@ -3,7 +3,17 @@ const fs = require('fs');
 const path = require("path")
 const glob = require('glob');
 const parseHtmlComments = require('parse-html-comments')
+/**
+ *
+ * @public
+ * @environment server
+ */
 const parseJSDoc = require("./jsdoc");
+/**
+ *
+ * @public
+ * @environment server
+ */
 const renderDocumentation = require("./render");
 
 /**
@@ -85,6 +95,11 @@ class ExtractComment {
 
 const extractInstance = new ExtractComment()
 
+/**
+ *
+ * @public
+ * @environment server
+ */
 function CoCreateExtract(directory, ignoreFolders, extensions) {
     let extensionsStr = "*";
     let ignoreFolderStr = "";
@@ -125,9 +140,44 @@ function CoCreateExtract(directory, ignoreFolders, extensions) {
 // parsing as the structured documentation API.
 CoCreateExtract.parseJSDoc = parseJSDoc;
 CoCreateExtract.renderDocumentation = renderDocumentation;
+/**
+ *
+ * @public
+ * @environment server
+ */
 CoCreateExtract.prepareDataset = renderDocumentation.prepareDataset;
+/**
+ *
+ * @public
+ * @environment server
+ */
 CoCreateExtract.renderTemplate = renderDocumentation.renderTemplate;
+/**
+ *
+ * @public
+ * @environment server
+ */
 CoCreateExtract.renderTargets = renderDocumentation.renderTargets;
 
 module.exports = CoCreateExtract;
 
+
+/**
+ * Documentation generator
+ *
+ * @module docs
+ * @environment server
+ */
+
+/**
+ * Default export contract for this module.
+ *
+ * @name api-default-export
+ * @kind member
+ * @default-export
+ * @environment server
+ * @example
+ * ```json
+ * "CommonJS constructor"
+ * ```
+ */

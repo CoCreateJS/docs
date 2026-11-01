@@ -7,27 +7,6 @@
     "lowcode",
     "doc-generator"
   ],
-  "cocreate": {
-    "environment": [
-      "server"
-    ],
-    "interface": {
-      "schemaVersion": 1,
-      "summary": "Documentation generator ",
-      "source": "src/index.js",
-      "api": {
-        "exports": [
-          "CoCreateExtract",
-          "parseJSDoc",
-          "renderDocumentation",
-          "prepareDataset",
-          "renderTemplate",
-          "renderTargets"
-        ],
-        "defaultExport": "CommonJS constructor"
-      }
-    }
-  },
   "main": "./src/index.js",
   "scripts": {
     "test": "node --test",

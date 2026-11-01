@@ -32,12 +32,30 @@ function prepareDataset(dataset) {
 
         const usedAnchors = new Set();
         const doclets = (Array.isArray(module.doclets) ? module.doclets : []).map((doclet) => {
-            const baseAnchor = slugify(doclet.longname || doclet.name || doclet.kind);
+            const normalized = { ...doclet };
+            const tags = Array.isArray(normalized.tags) ? normalized.tags : [];
+            const isAttribute = tags.some((tag) =>
+                String(tag.title || tag.originalTitle || "").toLowerCase() === "attribute"
+            );
+
+            if (isAttribute) {
+                normalized.kind = "attribute";
+                delete normalized.memberof;
+                if (normalized.name) normalized.longname = normalized.name;
+            } else if (typeof normalized.memberof === "string" && normalized.memberof.startsWith("module:")) {
+                delete normalized.memberof;
+                if (normalized.name) normalized.longname = normalized.name;
+            }
+
+            const baseAnchor = slugify(
+                normalized.anchor ||
+                (normalized.name ? `${normalized.kind}-${normalized.name}` : normalized.longname || normalized.kind)
+            );
             let anchor = baseAnchor;
             let anchorSuffix = 2;
             while (usedAnchors.has(anchor)) anchor = `${baseAnchor}-${anchorSuffix++}`;
             usedAnchors.add(anchor);
-            return { ...doclet, anchor };
+            return { ...normalized, anchor };
         });
 
         return {
@@ -52,13 +70,16 @@ function prepareDataset(dataset) {
     return { ...dataset, modules };
 }
 
-function renderTargets(dataset, options = {}) {
-    const { template: templateRoot, output: outputRoot, targets } = options;
+async function renderTargets(dataset, options = {}) {
+    const { template: templateRoot, output: outputRoot, targets, renderValue } = options;
     if (!templateRoot || !outputRoot) {
         throw new TypeError("Both template and output paths are required to render documentation.");
     }
     if (!Array.isArray(targets) || !targets.length) {
         throw new TypeError("At least one documentation render target is required.");
+    }
+    if (typeof renderValue !== "function") {
+        throw new TypeError("A CoCreate Utils renderValue function is required.");
     }
 
     const templateDirectory = path.resolve(templateRoot);
@@ -92,14 +113,14 @@ function renderTargets(dataset, options = {}) {
         }
 
         for (const scope of scopes) {
-            const relativeOutput = renderTemplate(target.output, scope);
+            const relativeOutput = await renderTemplate(target.output, scope, renderValue);
             const outputPath = path.resolve(outputDirectory, relativeOutput);
             const relativeCheck = path.relative(outputDirectory, outputPath);
             if (!relativeCheck || relativeCheck.startsWith(`..${path.sep}`) || relativeCheck === ".." || path.isAbsolute(relativeCheck)) {
                 throw new Error(`Render target output must be a file path inside the output directory: ${relativeOutput}`);
             }
             fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-            fs.writeFileSync(outputPath, renderTemplate(template, scope));
+            fs.writeFileSync(outputPath, await renderTemplate(template, scope, renderValue));
             written.push(outputPath);
         }
     }
@@ -119,9 +140,10 @@ function renderTargets(dataset, options = {}) {
  * @param {string} options.template - Directory containing the target templates.
  * @param {string} options.output - Destination directory for generated pages.
  * @param {Object[]} options.targets - Template/output/data scope definitions.
+ * @param {Function} options.renderValue - CoCreate Utils named export for value and AST interpolation.
  * @returns {string[]} Paths written by the renderer.
  */
-function renderDocumentation(dataset, options = {}) {
+async function renderDocumentation(dataset, options = {}) {
     const data = prepareDataset(dataset);
     return renderTargets(data, options);
 }

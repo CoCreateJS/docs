@@ -66,12 +66,13 @@ keeps its metadata flat and contains its JSDoc `doclets` and parser
 renders the dataset in the index; each module page also receives that page's
 current module as a `module` render scope. There is no project-name field.
 
-The standalone `renderTemplate(template, data)` helper handles double-curly
-data paths and nested native `<template render="path" render-as="name">`
-repeats. It returns an HTML string and preserves the native template elements
-as inert source references. Interpolated values are HTML-escaped, and unknown
-paths remain unchanged for inspection. The helper only renders supplied data;
-it does not fetch CRUD data or track live rendered items.
+The standalone `renderTemplate(template, data, renderValue)` helper delegates
+value and AST interpolation to the named `renderValue` export from
+`@cocreate/utils`, while Docs handles nested native
+`<template render="path" render-as="name">` repeats. It returns an HTML string
+and preserves native template elements as inert source references. The helper
+returns a promise, escapes final values for HTML output, and only renders the
+supplied data; it does not fetch CRUD data or track live items.
 
 The generator takes a `targets` array. Each target names a template and output
 path; `data` optionally selects an object in the dataset, and `each` plus `as`
@@ -96,20 +97,24 @@ documentation: {
 ```
 
 ```js
-const files = CoCreateDocs.renderDocumentation(dataset, {
-	template: "./src/apps/docs/templates",
-	output: "./src/docs",
-	targets: [
-		{ template: "menu.html", output: "menu.html" },
-		{ template: "index.html", output: "index.html" },
-		{
-			template: "page.html",
-			output: "{{module.slug}}/index.html",
-			each: "modules",
-			as: "module"
-		}
-	]
-});
+async function generateDocumentation(dataset) {
+	const { renderValue } = await import("@cocreate/utils");
+	return CoCreateDocs.renderDocumentation(dataset, {
+		template: "./src/apps/docs/templates",
+		output: "./src/docs",
+		renderValue,
+		targets: [
+			{ template: "menu.html", output: "menu.html" },
+			{ template: "index.html", output: "index.html" },
+			{
+				template: "page.html",
+				output: "{{module.slug}}/index.html",
+				each: "modules",
+				as: "module"
+			}
+		]
+	});
+}
 ```
 
 `onDiagnostic` receives JSDoc warnings and errors. If JSDoc can still produce
