@@ -16,14 +16,14 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cocreatejs/CoCreate-docs.git"
+    "url": "git+https://github.com/CoCreateJS/docs.git"
   },
   "author": "CoCreate LLC",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CoCreateJS/CoCreate-docs/issues"
+    "url": "https://github.com/CoCreateJS/docs/issues"
   },
-  "homepage": "https://github.com/CoCreateJS/CoCreate-docs#readme",
+  "homepage": "https://github.com/CoCreateJS/docs#readme",
   "dependencies": {
     "@cocreate/config": "^1.21.0",
     "@cocreate/crud-client": "^1.37.0",
