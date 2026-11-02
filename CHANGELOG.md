@@ -1,3 +1,28 @@
+# [2.0.0](https://github.com/CoCreateJS/docs/compare/v1.19.2...v2.0.0) (2026-11-02)
+
+
+### Bug Fixes
+
+* add Deno specific entries to .gitignore ([0c7da25](https://github.com/CoCreateJS/docs/commit/0c7da25b0a8e37e6ae954274b9bb12da2243b12a))
+* bump [@cocreate](https://github.com/cocreate) dependencies ([0f1f771](https://github.com/CoCreateJS/docs/commit/0f1f77101653fcb2249f20a9446042816aa20529))
+* bump versions ([2c00175](https://github.com/CoCreateJS/docs/commit/2c0017521dfab578db1580601840f55663f8a706))
+* bump versions ([32b7e79](https://github.com/CoCreateJS/docs/commit/32b7e7933456e18cfe9a441606584566ca4a9eb2))
+* remove trailing slash from node_modules entry in .gitignore ([197c1ee](https://github.com/CoCreateJS/docs/commit/197c1eeb8f4395fcca13bc86ed990f3c82698ba2))
+* update git url ([adb11ed](https://github.com/CoCreateJS/docs/commit/adb11ede25deb4c0d073673cbef685440ff45ee7))
+* update GitHub Actions to use latest versions and sync package.json description ([0450e99](https://github.com/CoCreateJS/docs/commit/0450e99d7c10848acbe829176d85566daf32a076))
+
+
+### Features
+
+* align CoCreate repository and package naming ([8d6e1e1](https://github.com/CoCreateJS/docs/commit/8d6e1e10d07ad48712edd3f49c88d90301348e73))
+* **docs:** render configured documentation targets ([605ea3f](https://github.com/CoCreateJS/docs/commit/605ea3f96aa984b97c14614b21c55cda7358a58b))
+* replace uuid import and usage with utils ([6a0b2e7](https://github.com/CoCreateJS/docs/commit/6a0b2e7d4c0810e732923c38a764f8ab5ce03d2f))
+
+
+### BREAKING CHANGES
+
+* consumers must use the renamed CoCreate package and repository identities; the previous prefixed names are no longer supported.
+
 ## [1.19.2](https://github.com/CoCreateJS/CoCreate-docs/compare/v1.19.1...v1.19.2) (2026-07-19)
 
 
