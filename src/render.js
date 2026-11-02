@@ -33,13 +33,9 @@ function prepareDataset(dataset) {
         const usedAnchors = new Set();
         const doclets = (Array.isArray(module.doclets) ? module.doclets : []).map((doclet) => {
             const normalized = { ...doclet };
-            const tags = Array.isArray(normalized.tags) ? normalized.tags : [];
-            const isAttribute = tags.some((tag) =>
-                String(tag.title || tag.originalTitle || "").toLowerCase() === "attribute"
-            );
+            const isAttribute = normalized.kind === "attribute";
 
             if (isAttribute) {
-                normalized.kind = "attribute";
                 delete normalized.memberof;
                 if (normalized.name) normalized.longname = normalized.name;
             } else if (typeof normalized.memberof === "string" && normalized.memberof.startsWith("module:")) {
@@ -63,6 +59,8 @@ function prepareDataset(dataset) {
             slug,
             title: titleize(module.title || module.name || slug),
             doclets,
+            api: doclets.filter((doclet) => doclet.kind !== "attribute"),
+            declarative: doclets.filter((doclet) => doclet.kind === "attribute"),
             docletCount: doclets.length
         };
     });

@@ -61,8 +61,11 @@ no standalone JSON manifest is written.
 
 The returned dataset is the CoCreate data object itself, with `type`,
 `schemaVersion`, `errors`, and `modules` at its top level. Each module record
-keeps its metadata flat and contains its JSDoc `doclets` and parser
-`diagnostics`. The renderer adds slugs, display titles, and doclet anchors. It
+keeps its metadata flat and contains its JSDoc `doclets`, separate `api` and
+`declarative` arrays, and parser `diagnostics`. Doclets with
+`kind: "attribute"` appear in `declarative`; the rest appear in `api`.
+Source comments use `@kind attribute` for declarative entries. The renderer
+adds slugs, display titles, and doclet anchors. It
 renders the dataset in the index; each module page also receives that page's
 current module as a `module` render scope. There is no project-name field.
 
