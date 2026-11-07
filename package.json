@@ -26,7 +26,7 @@
   "homepage": "https://github.com/CoCreateJS/docs#readme",
   "dependencies": {
     "@cocreate/config": "^1.21.0",
-    "@cocreate/crud-client": "^1.37.0",
+    "@cocreate/crud": "^2.0.0",
     "@cocreate/file": "^1.25.0",
     "extract-comments": "^1.1.0",
     "glob": "^7.1.6",
@@ -40,7 +40,7 @@
     "@cocreate/actions@1.21.4": true,
     "@cocreate/api@1.22.5": true,
     "@cocreate/config@1.13.4": true,
-    "@cocreate/crud-client@1.34.6": true,
+    "@cocreate/crud@2.0.2": true,
     "@cocreate/element-prototype@1.31.4": true,
     "@cocreate/elements@1.42.9": true,
     "@cocreate/filter@1.33.6": true,
